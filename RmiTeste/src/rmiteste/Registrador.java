@@ -3,14 +3,14 @@ package rmiteste;
 import java.rmi.*;
 import java.rmi.server.*;
 
-import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.LocateRegistry; // Servidor DNS
 
 public class Registrador {
 	public Registrador() {
 		servidorDNS();
 		try {
 			Servidor obj = new Servidor ();
-			Naming.rebind("//localhost/InverterRef", obj);
+			Naming.rebind("//localhost/InverterRef", obj); // Naming.rebind("//localhost:1099/InverterRef", obj);
 			System.out.println("Servidor Registrado!");
 		} catch (Exception e) {
 			System.out.println("Registrador error: " + e);

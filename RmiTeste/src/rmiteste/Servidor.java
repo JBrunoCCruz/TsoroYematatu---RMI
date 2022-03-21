@@ -15,4 +15,8 @@ public class Servidor extends UnicastRemoteObject implements InverterItf {
 		String retorno = (strbuf.reverse()).toString();
 		return retorno;
 	}
+	
+	public String agradecer (String nome) {
+		return "Obrigado " + nome + "!";
+	}
 }

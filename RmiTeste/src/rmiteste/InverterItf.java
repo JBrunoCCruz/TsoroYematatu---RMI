@@ -5,4 +5,5 @@ import java.rmi.RemoteException;
 
 public interface InverterItf extends Remote{
 	String inverter(String msg) throws RemoteException;
+	String agradecer(String nome) throws RemoteException;
 }

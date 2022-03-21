@@ -15,6 +15,8 @@ public class Cliente {
 			InverterItf Inv = (InverterItf)Naming.lookup("//localhost/InverterRef");
 			System.out.println("Objeto localizado!");
 			
+			System.out.println(Inv.agradecer("João Bruno"));
+			
 			for ( ; ; ) {
 				System.out.print("Digite a frase: ");				
 				BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
