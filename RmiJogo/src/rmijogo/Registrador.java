@@ -5,15 +5,33 @@ import java.rmi.registry.LocateRegistry;
 
 public class Registrador {
 
-	public Registrador () {
+	public Registrador (String tipoDeCliente) {
 		servidorDNS ();
-		try {
-			// Servidor obj = new Servidor ();
-			// Naming.rebind("//localhost:1099/InverterRef", obj);
-			// System.out.println("Servidor Registrado!");
-		} catch (Exception e) {
-			System.out.println("Registrador error: " + e);
-		}
+		if (tipoDeCliente.equals("Jogador1")) {
+			try {
+				System.out.println("Criando Cli1");
+				Cliente cli = new Cliente();
+				Naming.rebind( ("//localhost/Jogador1") , cli);
+				System.out.println("Cliente " + tipoDeCliente +  " Registrado!");
+				
+			} catch (Exception e) {
+				System.out.println("Registrar Jog_1 error: " + e);
+			}
+			
+		} else if (tipoDeCliente.equals("Jogador2")) {
+			try {
+				System.out.println("Criando Cli2");
+				Cliente cli = new Cliente();
+				Naming.rebind( ("//localhost/Jogador2") , cli);
+				System.out.println("Cliente " + tipoDeCliente +  " Registrado!");
+				
+			} catch (Exception e) {
+				System.out.println("Registrar Jog_2 error: " + e);
+			}
+			
+		} else {
+			System.out.println("Erro! Tipo de jogador inválido!");
+		}				
 	}
 	
 	public void servidorDNS () {
