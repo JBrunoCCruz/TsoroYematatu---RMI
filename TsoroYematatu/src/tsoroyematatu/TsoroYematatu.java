@@ -61,7 +61,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	
 	
 	/*
-	 * Teste de invocação dos métodos remotos
+	 * Teste de chamada dos métodos remotos
 	 * */
 	public static void comunica () {
 		try {
@@ -76,7 +76,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		}
 	}
 	/*
-	 * Teste de invocação dos métodos remotos
+	 * Teste de chamada dos métodos remotos
 	 * */
 	
 	
