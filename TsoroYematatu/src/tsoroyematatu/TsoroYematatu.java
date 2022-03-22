@@ -25,11 +25,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	static int tipoDeJogadorOponente;
 	
 	// Atributos utilizados para a interface gráfica
-	JFrame frame = new JFrame("Menu");
+	static JFrame frame = new JFrame("Menu");
 	JTextField textField_1;
 	JTextField textField_2;
 	
-	JFrame f2 = new JFrame("Tela do jogo");
+	static JFrame f2 = new JFrame("Tela do jogo");
 	JTextArea textAreaChat;
 	JTextField textFieldChat;					
 	
@@ -54,7 +54,8 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	// Construtor
 	public TsoroYematatu () throws RemoteException {
 		super ();
-		System.out.print("Criado! ");
+		System.out.print("Criado!! ");
+		primeiraTela();
 	}		
 	
 	
@@ -179,7 +180,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (!minhaCor.equals("vazia")) {
-					frame.setVisible(false);								
+					frame.setVisible(false);
 					f2.setVisible(true);
 					
 					segundaTela();
@@ -268,7 +269,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				minhaCor = "vermelha";
 			}
 		});
-		lblNewLabel_1.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecavermelha.png")));
+		lblNewLabel_1.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecavermelha.png")));
 		lblNewLabel_1.setBounds(135, 247, 40, 40);
 		frame.add(lblNewLabel_1);
 		
@@ -280,7 +281,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				minhaCor = "azul";
 			}
 		});
-		lblNewLabel_1_1.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecaazul.png")));
+		lblNewLabel_1_1.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecaazul.png")));
 		lblNewLabel_1_1.setBounds(198, 247, 40, 40);
 		frame.add(lblNewLabel_1_1);
 		
@@ -292,7 +293,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				minhaCor = "verde";
 			}
 		});
-		lblNewLabel_1_2.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecaverde.png")));
+		lblNewLabel_1_2.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecaverde.png")));
 		lblNewLabel_1_2.setBounds(268, 247, 40, 40);
 		frame.add(lblNewLabel_1_2);
 		
@@ -304,7 +305,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				minhaCor = "amarela";
 			}
 		});
-		lblNewLabel_1_3.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecaamarela.png")));
+		lblNewLabel_1_3.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecaamarela.png")));
 		lblNewLabel_1_3.setBounds(328, 247, 40, 40);
 		frame.add(lblNewLabel_1_3);
 		/* 
@@ -312,7 +313,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		 * */
 		
 		JLabel lblNewLabel_1_4 = new JLabel();
-		lblNewLabel_1_4.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/tsorologo2.png")));
+		lblNewLabel_1_4.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/tsorologo2.png")));
 		lblNewLabel_1_4.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1_4.setBounds(138, 34, 228, 202);
 		frame.add(lblNewLabel_1_4);
@@ -437,14 +438,14 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		 * */
 		// Tabuleiro
 		JLabel tabuleiro = new JLabel();
-		tabuleiro.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/tabuleiro6.png")));
+		tabuleiro.setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/tabuleiro6.png")));
 		tabuleiro.setHorizontalAlignment(SwingConstants.CENTER);
 		tabuleiro.setBounds(240, 30, 221, 240);
 		f2.add(tabuleiro);
 		
 		// Pecas
 		peca = new ArrayList<>();	
-		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecadefault.png"))));
+		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecadefault.png"))));
 		peca.get(0).setHorizontalAlignment(SwingConstants.CENTER);
 		peca.get(0).setBounds(330, 25, 40, 40);
 		peca.get(0).setName("vazia");
@@ -456,7 +457,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		});
 		f2.add(peca.get(0));
 		
-		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecadefault.png"))));
+		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecadefault.png"))));
 		peca.get(1).setHorizontalAlignment(SwingConstants.CENTER);
 		peca.get(1).setBounds(270, 150, 40, 40);
 		peca.get(1).addMouseListener(new MouseAdapter() {
@@ -468,7 +469,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		peca.get(1).setName("vazia");
 		f2.add(peca.get(1));
 		
-		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecadefault.png"))));
+		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecadefault.png"))));
 		peca.get(2).setHorizontalAlignment(SwingConstants.CENTER);
 		peca.get(2).setBounds(330, 150, 40, 40);
 		peca.get(2).addMouseListener(new MouseAdapter() {
@@ -480,7 +481,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		peca.get(2).setName("vazia");
 		f2.add(peca.get(2));
 		
-		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecadefault.png"))));
+		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecadefault.png"))));
 		peca.get(3).setHorizontalAlignment(SwingConstants.CENTER);
 		peca.get(3).setBounds(390, 150, 40, 40);
 		peca.get(3).addMouseListener(new MouseAdapter() {
@@ -492,7 +493,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		peca.get(3).setName("vazia");
 		f2.add(peca.get(3));
 		
-		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecadefault.png"))));
+		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecadefault.png"))));
 		peca.get(4).setHorizontalAlignment(SwingConstants.CENTER);
 		peca.get(4).setBounds(230, 240, 40, 40);
 		peca.get(4).addMouseListener(new MouseAdapter() {
@@ -504,7 +505,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		peca.get(4).setName("vazia");
 		f2.add(peca.get(4));
 		
-		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecadefault.png"))));
+		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecadefault.png"))));
 		peca.get(5).setHorizontalAlignment(SwingConstants.CENTER);
 		peca.get(5).setBounds(330, 240, 40, 40);
 		peca.get(5).addMouseListener(new MouseAdapter() {
@@ -516,7 +517,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		peca.get(5).setName("vazia");
 		f2.add(peca.get(5));
 		
-		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/pecadefault.png"))));
+		peca.add(new JLabel(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/pecadefault.png"))));
 		peca.get(6).setHorizontalAlignment(SwingConstants.CENTER);
 		peca.get(6).setBounds(430, 240, 40, 40);
 		peca.get(6).addMouseListener(new MouseAdapter() {
@@ -560,7 +561,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		} else if ( (turnoDoJogo < 7) && peca.get(posiNoTabuleiro).getName().equals("vazia") ) {
 			//System.out.println("Minha jogada - ponto: " + pontoNoTabuleiro); // Debug
 			peca.get(posiNoTabuleiro).setName(minhaCor);
-			peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + minhaCor + ".png")));
+			peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + minhaCor + ".png")));
 			turnoDoJogo += 1;
 			tabuleiroTsoro.set(posiNoTabuleiro, true);
 			meuTurno = false;
@@ -572,8 +573,8 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 			posiVazia = tabuleiroTsoro.indexOf(false);													
 			
 			if (posiNoTabuleiro == 0) {
-				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + "default".toString() + ".png")));
-				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + minhaCor + ".png")));			
+				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + "default".toString() + ".png")));
+				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + minhaCor + ".png")));			
 				peca.get(posiNoTabuleiro).setName("vazia");
 				peca.get(posiVazia).setName(minhaCor);		
 				turnoDoJogo += 1;
@@ -584,8 +585,8 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
 			} else if (posiNoTabuleiro == 1 && (posiVazia == 0 || posiVazia == 2 || posiVazia == 3 || posiVazia == 4) ) {
-				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + "default".toString() + ".png")));
-				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + minhaCor + ".png")));			
+				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + "default".toString() + ".png")));
+				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + minhaCor + ".png")));			
 				peca.get(posiNoTabuleiro).setName("vazia");
 				peca.get(posiVazia).setName(minhaCor);		
 				turnoDoJogo += 1;
@@ -596,8 +597,8 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
 			} else if (posiNoTabuleiro == 2 && (posiVazia == 0 || posiVazia == 1 || posiVazia == 3 || posiVazia == 5) ) {
-				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + "default".toString() + ".png")));
-				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + minhaCor + ".png")));			
+				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + "default".toString() + ".png")));
+				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + minhaCor + ".png")));			
 				peca.get(posiNoTabuleiro).setName("vazia");
 				peca.get(posiVazia).setName(minhaCor);		
 				turnoDoJogo += 1;
@@ -608,8 +609,8 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
 			} else if (posiNoTabuleiro == 3 && (posiVazia == 0 || posiVazia == 1 || posiVazia == 2 || posiVazia == 6) ) {
-				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + "default".toString() + ".png")));
-				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + minhaCor + ".png")));			
+				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + "default".toString() + ".png")));
+				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + minhaCor + ".png")));			
 				peca.get(posiNoTabuleiro).setName("vazia");
 				peca.get(posiVazia).setName(minhaCor);		
 				turnoDoJogo += 1;
@@ -620,8 +621,8 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
 			} else if (posiNoTabuleiro == 4 && (posiVazia == 0 || posiVazia == 1 || posiVazia == 5 || posiVazia == 6) ) {
-				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + "default".toString() + ".png")));
-				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + minhaCor + ".png")));			
+				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + "default".toString() + ".png")));
+				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + minhaCor + ".png")));			
 				peca.get(posiNoTabuleiro).setName("vazia");
 				peca.get(posiVazia).setName(minhaCor);		
 				turnoDoJogo += 1;
@@ -632,8 +633,8 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
 			} else if (posiNoTabuleiro == 5 && (posiVazia == 0 || posiVazia == 2 || posiVazia == 4 || posiVazia == 6) ) {
-				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + "default".toString() + ".png")));
-				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + minhaCor + ".png")));			
+				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + "default".toString() + ".png")));
+				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + minhaCor + ".png")));			
 				peca.get(posiNoTabuleiro).setName("vazia");
 				peca.get(posiVazia).setName(minhaCor);		
 				turnoDoJogo += 1;
@@ -644,8 +645,8 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
 			} else if (posiNoTabuleiro == 6 && (posiVazia == 0 || posiVazia == 3 || posiVazia == 4 || posiVazia == 5) ) {
-				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + "default".toString() + ".png")));
-				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/jogointerface/imagens/peca" + minhaCor + ".png")));			
+				peca.get(posiNoTabuleiro).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + "default".toString() + ".png")));
+				peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + minhaCor + ".png")));			
 				peca.get(posiNoTabuleiro).setName("vazia");
 				peca.get(posiVazia).setName(minhaCor);		
 				turnoDoJogo += 1;
@@ -779,12 +780,16 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	}
 	
 	
+	static void carregaTela () {
+		
+	}
+	
 	/*
 	 * Interface Gráfica
 	 * */
 	
 	public static void main(String[] args) {
 		registra ();
-		comunica ();
+		comunica ();		
 	}
 }
