@@ -21,21 +21,20 @@ import java.util.Scanner;
 public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo {
 	// Atributos utilizados para o RPC
 	static Scanner console = new Scanner(System.in);
-	static int tipoDeJogador;
-	static int tipoDeJogadorOponente;
+	static int tipoDeJogador = 0;
+	static int tipoDeJogadorOponente = 0;
+	static InterfaceJogo IntJog;
 	
 	// Atributos utilizados para a interface gráfica
 	static JFrame frame = new JFrame("Menu");
-	JTextField textField_1;
-	JTextField textField_2;
+	static JTextField textField_1;
+	static JTextField textField_2;
 	
 	static JFrame f2 = new JFrame("Tela do jogo");
-	JTextArea textAreaChat;
-	JTextField textFieldChat;					
+	static JTextArea textAreaChat;
+	static JTextField textFieldChat;					
 	
-	// Informações gerais do jogo
-	static JLabel ipServidorLabel = new JLabel("ipServidor: ");
-	static JLabel portaServidorLabel = new JLabel("portaServidor: ");
+	// Informações gerais do jogo	
 	static JLabel minhacorLabel = new JLabel("Minha cor: ");
 	static JLabel informacaoDaJogadaLabel = new JLabel("...");
 	
@@ -46,16 +45,14 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	static int turnoDoJogo = 1;
 	static boolean meuTurno = false;
 	static ArrayList<Boolean> tabuleiroTsoro = new ArrayList<>(Arrays.asList(false, false, false, false, false, false, false));
-	JFrame frameResultado = new JFrame("Resultado");
-	JLabel labelResultado = new JLabel("resultado");
-	static boolean voceComeca = false;
+	static JFrame frameResultado = new JFrame("Resultado");
+	static JLabel labelResultado = new JLabel("resultado");
+	static boolean voceComeca = false;	
 	
 	
 	// Construtor
 	public TsoroYematatu () throws RemoteException {
 		super ();
-		System.out.print("Criado!! ");
-		primeiraTela();
 	}		
 	
 	
@@ -69,6 +66,15 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	
 	public Boolean mensagem (String mensagem) {
 		System.out.println (mensagem);
+		if (mensagem.equals(":conectado")) {
+			localizaObjeto ();
+			meuTurno = true;
+			informacaoDaJogadaLabel.setText("Meu turno");
+		} else if (mensagem.equals(":desistir")) {
+			venceuOJogo();
+		} else {
+			textAreaChat.setText(textAreaChat.getText() + mensagem);
+		}
 		return true;
 	}
 	/*
@@ -80,17 +86,17 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	 * Invocação para registrar no DNS
 	 * */
 	public static void registra () {
-		try {
-			System.out.print ("Jogador1 (1) ou Jogador2 (2)?: ");
-			tipoDeJogador = console.nextInt();
-			
+		try {			
 			if (tipoDeJogador == 1) {
 				tipoDeJogadorOponente = 2;
-				new Registrador ("Jogador1");
+				new Registrador ("Jogador1");				
 				
 			} else if (tipoDeJogador == 2) {
 				tipoDeJogadorOponente = 1;
 				new Registrador ("Jogador2");
+				localizaObjeto();
+				IntJog.mensagem(":conectado");
+				informacaoDaJogadaLabel.setText("Turno do oponente");
 				
 			} else {
 				tipoDeJogadorOponente = 0;
@@ -109,16 +115,13 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	/*
 	 * Teste de chamada dos métodos remotos
 	 * */
-	public static void comunica () {
-		try {
-			Scanner scan = new Scanner(System.in);
-			System.out.print("Pressione enter para comunicar: ");
-			String tecla = scan.nextLine();
-			InterfaceJogo IntJog = (InterfaceJogo) Naming.lookup("//localhost/Jogador" + Integer.toString(tipoDeJogadorOponente) );
-			System.out.println ("Objeto localizado! (Jogador" + Integer.toString(tipoDeJogadorOponente) + ")");
-			IntJog.mensagem("Mensagem do jogador" + Integer.toString(tipoDeJogador));
+	public static void localizaObjeto () {
+		try {			
+			IntJog = (InterfaceJogo) Naming.lookup("//localhost/Jogador" + Integer.toString(tipoDeJogadorOponente) );
+			System.out.println ("Objeto localizado! (Jogador" + Integer.toString(tipoDeJogadorOponente) + ")");			
+			
 		} catch (Exception e) {
-			System.out.println ("Comunica erro: " + e);
+			System.out.println ("Localiza objeto erro: " + e);
 		}
 	}
 	/*
@@ -134,7 +137,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	/*
 	 * Menu do jogo
 	 * */
-	public void primeiraTela () {
+	public static void primeiraTela () {
 		frame.setBounds(150, 150, 500, 600);
 		frame.setResizable(false);
 		frame.setLayout(null);
@@ -148,19 +151,20 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		btnNewButton_1_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (textField_1.getText().isEmpty() || textField_2.getText().isEmpty()) {
+				if (textField_1.getText().isEmpty()) {
 					
 				} else if (!minhaCor.equals("vazia")) {
+					tipoDeJogador = 2; // Jogador que cria partida
+					registra ();
 					frame.setVisible(false);					
-					f2.setVisible(true);
-					
+					f2.setVisible(true);					
 					segundaTela();					
 				}				
 			}
 		});
 		btnNewButton_1_1.setForeground(Color.BLACK);
 		btnNewButton_1_1.setBackground(Color.BLUE);
-		btnNewButton_1_1.setBounds(165, 368, 161, 40);
+		btnNewButton_1_1.setBounds(165, 358, 161, 40);
 		frame.add(btnNewButton_1_1);
 		
 		JButton btnNewButton_1_1_1 = new JButton("SAIR");
@@ -179,11 +183,14 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		btnNewButton_1_1_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (!minhaCor.equals("vazia")) {
-					frame.setVisible(false);
-					f2.setVisible(true);
+				if (textField_1.getText().isEmpty()) {
 					
-					segundaTela();
+				} else if (!minhaCor.equals("vazia")) {
+					tipoDeJogador = 1; // Jogador que cria partida
+					registra ();
+					frame.setVisible(false);
+					f2.setVisible(true);					
+					segundaTela();					
 				} 			
 			}
 		});
@@ -226,36 +233,18 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		textField_1.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		textField_1.setColumns(10);
-		textField_1.setBounds(82, 419, 138, 31);
+		textField_1.setBounds(175, 419, 138, 31);
 		frame.add(textField_1);
-		
-		textField_2 = new JTextField(); // Porta
-		textField_2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		textField_2.setColumns(10);
-		textField_2.setBounds(269, 419, 138, 31);
-		frame.add(textField_2);
+				
 		/* 
 		 * Campos de texto
 		 * */
-		
-		JLabel lblOu = new JLabel("OU");
-		lblOu.setHorizontalAlignment(SwingConstants.CENTER);
-		lblOu.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
-		lblOu.setBounds(221, 341, 46, 25);
-		frame.add(lblOu);
-		
+						
 		JLabel lblEndereco = new JLabel("Endereco");
 		lblEndereco.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEndereco.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
-		lblEndereco.setBounds(90, 461, 120, 25);
-		frame.add(lblEndereco);
-		
-		JLabel lblPorta = new JLabel("Porta");
-		lblPorta.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPorta.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
-		lblPorta.setBounds(279, 461, 120, 25);
-		frame.add(lblPorta);
+		lblEndereco.setBounds(185, 461, 120, 25);
+		frame.add(lblEndereco);				
 		
 		
 		/* 
@@ -323,7 +312,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	/*
 	 * Tela da partida
 	 * */
-	public void segundaTela () {
+	public static void segundaTela () {
 		
 		/* 
 		 * Botões
@@ -348,7 +337,12 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 			@Override
 			public void mouseClicked(MouseEvent e) {				
 				// Envia mensagem de desistir para o cliente
-				perdeuOJogo();
+				try {
+					IntJog.mensagem(":desistir");
+					perdeuOJogo();
+				} catch (Exception e2) {
+
+				}				
 			}
 		});
 		
@@ -357,7 +351,12 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 			@Override
 			public void mouseClicked(MouseEvent e) {				
 				textAreaChat.setText(textAreaChat.getText() + "Eu: " + textFieldChat.getText() + "\r\n");
-				// Enviar mensagem do CHAT para o oponente
+				// Enviar mensagem do CHAT para o oponente								
+				try {
+					IntJog.mensagem("Oponente: "  + textFieldChat.getText() + "\r\n");
+				} catch (Exception e2) {
+					
+				}
 				textFieldChat.setText("");
 			}
 		});
@@ -382,18 +381,10 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		minhacorLabel.setText("Minha cor: " + minhaCor);
 		minhacorLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
 		minhacorLabel.setForeground(new java.awt.Color(0, 0, 0));
-		minhacorLabel.setBounds(12, 320, 161, 40);
+		minhacorLabel.setBounds(15, 320, 161, 40);
 		f2.add(minhacorLabel);
-		
-		ipServidorLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
-		ipServidorLabel.setForeground(new java.awt.Color(100, 74, 138));
-		ipServidorLabel.setBounds(12, 370, 161, 40);
-		f2.add(ipServidorLabel);
 				
-		portaServidorLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
-		portaServidorLabel.setForeground(new java.awt.Color(200, 28, 78));
-		portaServidorLabel.setBounds(12, 420, 161, 40);
-		f2.add(portaServidorLabel);
+						
 		/*
 		 * Informaçoes de endereço e IP do Servidor e Cor e da Jogada
 		 * */
@@ -549,7 +540,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	/*
 	 * Análisa minhas jogadas (Ponto no tabuleiro onde eu cliquei)
 	 * */
-	public void analisarMinhaJogada (String pontoNoTabuleiro) {
+	public static void analisarMinhaJogada (String pontoNoTabuleiro) {
 		
 		int posiNoTabuleiro = Integer.parseInt(pontoNoTabuleiro); 
 		int posiVazia = -1;
@@ -671,76 +662,82 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	/*
 	 * Detecta o vencedor verificando as cores linha por linha
 	 * */
-	public Runnable detectaVencedor = new Runnable() {
+	public static Runnable detectaVencedor = new Runnable() {
 		@Override
 		public void run() {
-			while (true) {
-				if (!minhaCor.equals("vazia") && !corDoOponente.equals("vazia")) {
-					/*
-					 * Vitória
-					 * */
-					if (peca.get(0).getName().equals(minhaCor) && peca.get(1).getName().equals(minhaCor) && peca.get(4).getName().equals(minhaCor)) { //0 - 1 - 4												
-						System.out.println("Vitória!");
-						venceuOJogo();
-						while(true);
-						
-					} else if (peca.get(0).getName().equals(minhaCor) && peca.get(2).getName().equals(minhaCor) && peca.get(5).getName().equals(minhaCor)) { // 0 - 2 - 5
-						System.out.println("Vitória!");
-						venceuOJogo();
-						while(true);
-						
-					} else if (peca.get(0).getName().equals(minhaCor) && peca.get(3).getName().equals(minhaCor) && peca.get(6).getName().equals(minhaCor)) { // 0 - 3 - 6
-						System.out.println("Vitória!");
-						venceuOJogo();
-						while(true);
-						
-					} else if (peca.get(1).getName().equals(minhaCor) && peca.get(2).getName().equals(minhaCor) && peca.get(3).getName().equals(minhaCor)) { // 1 - 2 - 3
-						System.out.println("Vitória!");
-						venceuOJogo();
-						while(true);
-						
-					} else if (peca.get(4).getName().equals(minhaCor) && peca.get(5).getName().equals(minhaCor) && peca.get(6).getName().equals(minhaCor)) { // 4 - 5 - 6						
-						System.out.println("Vitória!");
-						venceuOJogo();
-						while(true);
-					} 
-					/*
-					 * Derrota
-					 * */
-					else if (peca.get(0).getName().equals(corDoOponente) && peca.get(1).getName().equals(corDoOponente) && peca.get(4).getName().equals(corDoOponente)) { // 0 - 1 - 4						
-						System.out.println("Derrota!");
-						perdeuOJogo();
-						while(true);
-						
-					} else if (peca.get(0).getName().equals(corDoOponente) && peca.get(2).getName().equals(corDoOponente) && peca.get(5).getName().equals(corDoOponente)) { // 0 - 2 - 5						
-						System.out.println("Derrota!");
-						perdeuOJogo();
-						while(true);
-						
-					} else if (peca.get(0).getName().equals(corDoOponente) && peca.get(3).getName().equals(corDoOponente) && peca.get(6).getName().equals(corDoOponente)) { // 0 - 3 - 6						
-						System.out.println("Derrota!");
-						perdeuOJogo();
-						while(true);
-						
-					} else if (peca.get(1).getName().equals(corDoOponente) && peca.get(2).getName().equals(corDoOponente) && peca.get(3).getName().equals(corDoOponente)) { // 1 - 2 - 3
-						System.out.println("Derrota!");
-						perdeuOJogo();
-						while(true);
-						
-					} else if (peca.get(4).getName().equals(corDoOponente) && peca.get(5).getName().equals(corDoOponente) && peca.get(6).getName().equals(corDoOponente)) { // 4 - 5 - 6
-						System.out.println("Derrota!");						
-						perdeuOJogo();
-						while(true);
-						
-					}
-				}				
-				
-				try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
+			try {
+				while (true) {
+					if (!minhaCor.equals("vazia") && !corDoOponente.equals("vazia")) {
+						/*
+						 * Vitória
+						 * */
+						if (peca.get(0).getName().equals(minhaCor) && peca.get(1).getName().equals(minhaCor) && peca.get(4).getName().equals(minhaCor)) { //0 - 1 - 4												
+							System.out.println("Vitória!");
+							venceuOJogo();
+							while(true);
+							
+						} else if (peca.get(0).getName().equals(minhaCor) && peca.get(2).getName().equals(minhaCor) && peca.get(5).getName().equals(minhaCor)) { // 0 - 2 - 5
+							System.out.println("Vitória!");
+							venceuOJogo();
+							while(true);
+							
+						} else if (peca.get(0).getName().equals(minhaCor) && peca.get(3).getName().equals(minhaCor) && peca.get(6).getName().equals(minhaCor)) { // 0 - 3 - 6
+							System.out.println("Vitória!");
+							venceuOJogo();
+							while(true);
+							
+						} else if (peca.get(1).getName().equals(minhaCor) && peca.get(2).getName().equals(minhaCor) && peca.get(3).getName().equals(minhaCor)) { // 1 - 2 - 3
+							System.out.println("Vitória!");
+							venceuOJogo();
+							while(true);
+							
+						} else if (peca.get(4).getName().equals(minhaCor) && peca.get(5).getName().equals(minhaCor) && peca.get(6).getName().equals(minhaCor)) { // 4 - 5 - 6						
+							System.out.println("Vitória!");
+							venceuOJogo();
+							while(true);
+						} 
+						/*
+						 * Derrota
+						 * */
+						else if (peca.get(0).getName().equals(corDoOponente) && peca.get(1).getName().equals(corDoOponente) && peca.get(4).getName().equals(corDoOponente)) { // 0 - 1 - 4						
+							System.out.println("Derrota!");
+							perdeuOJogo();
+							while(true);
+							
+						} else if (peca.get(0).getName().equals(corDoOponente) && peca.get(2).getName().equals(corDoOponente) && peca.get(5).getName().equals(corDoOponente)) { // 0 - 2 - 5						
+							System.out.println("Derrota!");
+							perdeuOJogo();
+							while(true);
+							
+						} else if (peca.get(0).getName().equals(corDoOponente) && peca.get(3).getName().equals(corDoOponente) && peca.get(6).getName().equals(corDoOponente)) { // 0 - 3 - 6						
+							System.out.println("Derrota!");
+							perdeuOJogo();
+							while(true);
+							
+						} else if (peca.get(1).getName().equals(corDoOponente) && peca.get(2).getName().equals(corDoOponente) && peca.get(3).getName().equals(corDoOponente)) { // 1 - 2 - 3
+							System.out.println("Derrota!");
+							perdeuOJogo();
+							while(true);
+							
+						} else if (peca.get(4).getName().equals(corDoOponente) && peca.get(5).getName().equals(corDoOponente) && peca.get(6).getName().equals(corDoOponente)) { // 4 - 5 - 6
+							System.out.println("Derrota!");						
+							perdeuOJogo();
+							while(true);
+							
+						}
+					}				
+					
+					try {
+						Thread.sleep(1000);
+					} catch (Exception e) {
 
+					}
+					
 				}
-			}			
+			} catch (Exception e) {
+				System.out.println("Detecta vencedor erro! " + e);
+			}
+			
 		}
 	};
 	
@@ -748,7 +745,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	/*
 	 * Mostra mensagem informando que você venceu o jogo
 	 * */
-	public void venceuOJogo () {		
+	public static void venceuOJogo () {		
 		f2.setEnabled(false);
 		frameResultado.setBounds(200, 200, 200, 100);
 		labelResultado.setBounds(25, 25, 100, 50);
@@ -766,7 +763,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	/*
 	 * Mostra mensagem informando que você perdeu o jogo
 	 * */
-	public void perdeuOJogo () {		
+	public static void perdeuOJogo () {		
 		f2.setEnabled(false);
 		frameResultado.setBounds(200, 200, 200, 100);
 		labelResultado.setBounds(25, 25, 100, 50);
@@ -789,7 +786,8 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	 * */
 	
 	public static void main(String[] args) {
-		registra ();
-		comunica ();		
+		// registra ();
+		// localizaObjeto ();
+		primeiraTela ();
 	}
 }

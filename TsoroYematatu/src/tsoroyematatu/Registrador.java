@@ -12,7 +12,7 @@ public class Registrador {
 				servidorDNS (); // Criar o DNS
 				TsoroYematatu cli = new TsoroYematatu();
 				Naming.rebind( ("//localhost/Jogador1") , cli);
-				System.out.print(tipoDeCliente +  " Registrado!");
+				System.out.print(tipoDeCliente +  " Registrado! ");
 				
 			} catch (Exception e) {
 				System.out.println("Registrar Jog_1 error: " + e);
@@ -22,7 +22,7 @@ public class Registrador {
 			try {
 				TsoroYematatu cli = new TsoroYematatu();
 				Naming.rebind( ("//localhost/Jogador2") , cli);
-				System.out.print(tipoDeCliente +  " Registrado!");
+				System.out.print(tipoDeCliente +  " Registrado! ");
 				
 			} catch (Exception e) {
 				System.out.println("Registrar Jog_2 error: " + e);
