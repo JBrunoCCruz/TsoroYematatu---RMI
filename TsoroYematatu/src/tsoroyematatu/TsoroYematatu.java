@@ -60,20 +60,55 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	 * Métodos remotos
 	 * */
 	public Boolean mover (String movimento) {
+		// posicao:cor
 		System.out.println (movimento);
+		int delim = -1;
+		String movimentoDoOponente = "";
+		delim = movimento.indexOf(":");
+		
+		movimentoDoOponente = movimento.substring(0, delim);
+		corDoOponente = movimento.substring(delim + 1, movimento.length());
+		if (corDoOponente.equals(minhaCor)) {
+			corDoOponente = "preta";
+		}
+		
+		// Realizando jogada
+		
+		if (turnoDoJogo < 7) {
+			peca.get(Integer.parseInt(movimentoDoOponente)).setName(corDoOponente);
+			peca.get(Integer.parseInt(movimentoDoOponente)).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + corDoOponente + ".png")));
+			tabuleiroTsoro.set(Integer.parseInt(movimentoDoOponente), true);
+			turnoDoJogo += 1;							
+			meuTurno = true;
+			informacaoDaJogadaLabel.setText("Seu turno!");
+		} else {
+			int posiVazia = tabuleiroTsoro.indexOf(false);
+			
+			peca.get(Integer.parseInt(movimentoDoOponente)).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + "default".toString() + ".png")));						
+			peca.get(posiVazia).setIcon(new ImageIcon(TsoroYematatu.class.getResource("/tsoroyematatu/imagens/peca" + corDoOponente + ".png")));							
+			peca.get(Integer.parseInt(movimentoDoOponente)).setName("vazia");
+			peca.get(posiVazia).setName(corDoOponente);
+			
+			tabuleiroTsoro.set(posiVazia, true);
+			tabuleiroTsoro.set(Integer.parseInt(movimentoDoOponente), false);							
+			turnoDoJogo += 1;
+			meuTurno = true;
+			informacaoDaJogadaLabel.setText("Seu turno!");
+		}
+		
 		return true;
 	}
 	
-	public Boolean mensagem (String mensagem) {
-		System.out.println (mensagem);
-		if (mensagem.equals(":conectado")) {
+	public Boolean mensagem (String msg) {
+		System.out.println (msg);
+		if (msg.equals(":conectado")) {
 			localizaObjeto ();
 			meuTurno = true;
 			informacaoDaJogadaLabel.setText("Meu turno");
-		} else if (mensagem.equals(":desistir")) {
+		} else if (msg.equals(":desistir")) {
 			venceuOJogo();
 		} else {
-			textAreaChat.setText(textAreaChat.getText() + mensagem);
+			textAreaChat.setText(textAreaChat.getText() + msg);
 		}
 		return true;
 	}
@@ -410,6 +445,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					textAreaChat.setText(textAreaChat.getText() + "Eu: " + textFieldChat.getText() + "\r\n");
 					// Enviar mensagem do CHAT para o oponente
+					try {
+						IntJog.mensagem("Oponente: "  + textFieldChat.getText() + "\r\n");
+					} catch (Exception e2) {
+						
+					}
 					textFieldChat.setText("");
 				}
 				
@@ -558,6 +598,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 			meuTurno = false;
 			informacaoDaJogadaLabel.setText("Turno do oponente");
 			// Envia mensagem da jogada para o oponente
+			try {
+				IntJog.mover (pontoNoTabuleiro + ":" + minhaCor);
+			} catch (Exception e) {
+
+			}
 			
 		} else if (turnoDoJogo >= 7 && peca.get(posiNoTabuleiro).getName().equals(minhaCor) ) {
 			// Estruturação e execução da jogada
@@ -572,6 +617,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				meuTurno = false;
 				informacaoDaJogadaLabel.setText("Turno do oponente");
 				// Envia mensagem da jogada para o oponente
+				try {
+					IntJog.mover (pontoNoTabuleiro + ":" + minhaCor);
+				} catch (Exception e) {
+
+				}
 				tabuleiroTsoro.set(posiVazia, true);
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
@@ -584,6 +634,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				meuTurno = false;
 				informacaoDaJogadaLabel.setText("Turno do oponente");
 				// Envia mensagem da jogada para o oponente
+				try {
+					IntJog.mover (pontoNoTabuleiro + ":" + minhaCor);
+				} catch (Exception e) {
+
+				}
 				tabuleiroTsoro.set(posiVazia, true);
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
@@ -596,6 +651,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				meuTurno = false;
 				informacaoDaJogadaLabel.setText("Turno do oponente");
 				// Envia mensagem da jogada para o oponente
+				try {
+					IntJog.mover (pontoNoTabuleiro + ":" + minhaCor);
+				} catch (Exception e) {
+
+				}
 				tabuleiroTsoro.set(posiVazia, true);
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
@@ -608,6 +668,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				meuTurno = false;
 				informacaoDaJogadaLabel.setText("Turno do oponente");
 				// Envia mensagem da jogada para o oponente
+				try {
+					IntJog.mover (pontoNoTabuleiro + ":" + minhaCor);
+				} catch (Exception e) {
+
+				}
 				tabuleiroTsoro.set(posiVazia, true);
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
@@ -620,6 +685,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				meuTurno = false;
 				informacaoDaJogadaLabel.setText("Turno do oponente");
 				// Envia mensagem da jogada para o oponente
+				try {
+					IntJog.mover (pontoNoTabuleiro + ":" + minhaCor);
+				} catch (Exception e) {
+
+				}
 				tabuleiroTsoro.set(posiVazia, true);
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
@@ -632,6 +702,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				meuTurno = false;
 				informacaoDaJogadaLabel.setText("Turno do oponente");
 				// Envia mensagem da jogada para o oponente
+				try {
+					IntJog.mover (pontoNoTabuleiro + ":" + minhaCor);
+				} catch (Exception e) {
+
+				}
 				tabuleiroTsoro.set(posiVazia, true);
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 				
@@ -644,6 +719,11 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 				meuTurno = false;
 				informacaoDaJogadaLabel.setText("Turno do oponente");
 				// Envia mensagem da jogada para o oponente
+				try {
+					IntJog.mover (pontoNoTabuleiro + ":" + minhaCor);
+				} catch (Exception e) {
+
+				}
 				tabuleiroTsoro.set(posiVazia, true);
 				tabuleiroTsoro.set(posiNoTabuleiro, false);
 			} else {
