@@ -10,6 +10,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import javax.swing.*;
 
 // Imports adicionais
@@ -27,8 +30,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	
 	// Atributos utilizados para a interface gráfica
 	static JFrame frame = new JFrame("Menu");
-	static JTextField textField_1;
-	static JTextField textField_2;
+	static JTextField textField_1;	
 	
 	static JFrame f2 = new JFrame("Tela do jogo");
 	static JTextArea textAreaChat;
@@ -36,6 +38,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	
 	// Informações gerais do jogo	
 	static JLabel minhacorLabel = new JLabel("Minha cor: ");
+	static JLabel meuIpLabel = new JLabel("Minha cor: ");
 	static JLabel informacaoDaJogadaLabel = new JLabel("...");
 	
 	// Informações do tabuleiro
@@ -120,22 +123,22 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 	/*
 	 * Invocação para registrar no DNS
 	 * */
-	public static void registra () {
+	public static void registra (String ipDNS) {
 		try {			
 			if (tipoDeJogador == 1) {
 				tipoDeJogadorOponente = 2;
-				new Registrador ("Jogador1");				
+				new Registrador ("Jogador1", ipDNS);
 				
 			} else if (tipoDeJogador == 2) {
 				tipoDeJogadorOponente = 1;
-				new Registrador ("Jogador2");
+				new Registrador ("Jogador2", ipDNS);
 				localizaObjeto();
 				IntJog.mensagem(":conectado");
 				informacaoDaJogadaLabel.setText("Turno do oponente");
 				
 			} else {
 				tipoDeJogadorOponente = 0;
-				new Registrador ("Jogador3");
+				new Registrador ("Jogador3", ipDNS);
 			}
 			
 		} catch (Exception e) {
@@ -190,7 +193,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 					
 				} else if (!minhaCor.equals("vazia")) {
 					tipoDeJogador = 2; // Jogador que cria partida
-					registra ();
+					registra (textField_1.getText());
 					frame.setVisible(false);					
 					f2.setVisible(true);					
 					segundaTela();					
@@ -218,11 +221,9 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		btnNewButton_1_1_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (textField_1.getText().isEmpty()) {
-					
-				} else if (!minhaCor.equals("vazia")) {
+				if (!minhaCor.equals("vazia")) {
 					tipoDeJogador = 1; // Jogador que cria partida
-					registra ();
+					registra ("localhost");
 					frame.setVisible(false);
 					f2.setVisible(true);					
 					segundaTela();					
@@ -275,7 +276,7 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		 * Campos de texto
 		 * */
 						
-		JLabel lblEndereco = new JLabel("Endereco");
+		JLabel lblEndereco = new JLabel("Endereco DNS");
 		lblEndereco.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEndereco.setFont(new Font("Comic Sans MS", Font.BOLD, 15));
 		lblEndereco.setBounds(185, 461, 120, 25);
@@ -418,6 +419,18 @@ public class TsoroYematatu  extends UnicastRemoteObject implements InterfaceJogo
 		minhacorLabel.setForeground(new java.awt.Color(0, 0, 0));
 		minhacorLabel.setBounds(15, 320, 161, 40);
 		f2.add(minhacorLabel);
+		
+		String meuIp = "";
+		try {
+			meuIp = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+		meuIpLabel.setText("IP DNS: " + meuIp);
+		meuIpLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		meuIpLabel.setForeground(new java.awt.Color(0, 0, 0));
+		meuIpLabel.setBounds(15, 350, 161, 40);
+		f2.add(meuIpLabel);
 				
 						
 		/*

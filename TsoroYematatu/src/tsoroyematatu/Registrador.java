@@ -5,13 +5,13 @@ import java.rmi.registry.LocateRegistry;
 
 public class Registrador {
 
-	public Registrador (String tipoDeCliente) {
+	public Registrador (String tipoDeCliente, String ipDNS) {
 		
 		if (tipoDeCliente.equals("Jogador1")) {
 			try {
 				servidorDNS (); // Criar o DNS
 				TsoroYematatu cli = new TsoroYematatu();
-				Naming.rebind( ("//localhost/Jogador1") , cli);
+				Naming.rebind( ("//" + ipDNS + "/Jogador1") , cli);
 				System.out.print(tipoDeCliente +  " Registrado! ");
 				
 			} catch (Exception e) {
@@ -21,7 +21,7 @@ public class Registrador {
 		} else if (tipoDeCliente.equals("Jogador2")) {
 			try {
 				TsoroYematatu cli = new TsoroYematatu();
-				Naming.rebind( ("//localhost/Jogador2") , cli);
+				Naming.rebind( ("//" + ipDNS + "/Jogador2") , cli);
 				System.out.print(tipoDeCliente +  " Registrado! ");
 				
 			} catch (Exception e) {
